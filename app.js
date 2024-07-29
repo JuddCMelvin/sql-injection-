@@ -10,9 +10,10 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 const db = new sqlite3.Database(':memory:');
+
 db.serialize(function () {
-    db.run('CREATE TABLE user(username TEXT, password TEXT, title TEXT)');
-    db.run("INSERT INTO user VALUES('privilegedUser', 'privilegedUser1', 'Administrator')");
+    db.run("CREATE TABLE user (username TEXT, password TEXT, title TEXT)");
+	db.run("INSERT INTO user VALUES ('privilegedUser', 'privilegedUser1', 'Administrator')");
 });
 
 app.get('/', function(req,res) {
@@ -23,7 +24,11 @@ app.post('/login', function (req,res) {
     var username = req.body.username; 
     var password = req.body.password;
 
-    var query = "SELECT title FROM user WHERE username = " + username + " and password = " + password ; 
+    var query = "SELECT title FROM user where username = '" + username + "' and password = '" + password + "'";
+
+    console.log("username: " + username); 
+    console.log("password: " + password); 
+    console.log("query: " + query); 
 
     db.get(query, function (err, row) {
 
